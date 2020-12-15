@@ -1,2 +1,0 @@
-# Emily
-A virtual asistence
