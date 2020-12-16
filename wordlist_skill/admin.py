@@ -4,4 +4,4 @@ from .models import Word
 
 @admin.register(Word)
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['word','phonetic','definition','example']
+    list_display = ['word','phonetic','language','definition','example']
