@@ -3,6 +3,7 @@ Emmily/settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+Emmily/__pycache__/*
 *.py[cod]
 *$py.class
 
