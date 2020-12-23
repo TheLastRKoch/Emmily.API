@@ -3,6 +3,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
+from Emmily.services import DictionaryEn
 
 from wordlist_skill.serializers import WordSerializer
 from wordlist_skill.models import Word
@@ -34,15 +35,8 @@ class WordCreation(CreateAPIView):
     serializer_class = WordSerializer
     
     def create(self,request,*args,**kwargs):
-        #Check the aren't on the DB
-        
-        #Give format to the fields
-        request.data["word"] = request.data.get("name").capitalize()
-        request.data["definition"] = request.data.get("definition").capitalize()
-        request.data["example"] = request.data.get("example").capitalize()
-
-        request_word = request.data.get("word")
-        if Word.objects.filter(word = request_word).count() != 0:
+        #Check if the word already exist
+        if Word.objects.filter(word = request.data.get("word")).count() != 0:
             raise ValidationError({'word':'Already existe on the DB'})
         return super().create(request,*args,**kwargs)
     
