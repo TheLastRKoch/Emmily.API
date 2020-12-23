@@ -1,6 +1,7 @@
 # Custom
 Emmily/db.sqlite3
 .vscode/*
+.replit
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
