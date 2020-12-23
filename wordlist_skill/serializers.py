@@ -5,5 +5,5 @@ from wordlist_skill.models import Word
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
-        fields = ('id','word','phonetic','language','definition','example')
+        fields = ('id','word','language','phonetic','definition','example')
         

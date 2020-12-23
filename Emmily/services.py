@@ -1,0 +1,82 @@
+import requests
+import re
+
+class DictionaryEn():
+    
+    def __init__(self,search_word):
+        self.user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+        self.search_word = str.lower(search_word)
+    
+    def __performGoogleQuery(self):
+        """Return the result of the GET request of Google.com"""  
+        headers = {"user-agent" : self.user_agent}
+        parameters = {"hl":"en"}
+        query = "Meaning+"+self.search_word.replace(' ', '+')
+        url = url = f"https://google.com/search?q={query}"
+        return requests.get(url,params=parameters, headers=headers)
+
+    def __performVocabularyQuery(self):
+        """Return the result of the GET request from Vocabulary.com"""
+        headers = {'Content-Type': 'application/json'}
+        query = self.search_word.replace(' ', '+')
+        url = url = f"https://www.vocabulary.com/dictionary/definition.ajax?search={query}"
+        return requests.get(url,headers=headers)
+
+    def __performCorpusVocabularyQuery(self):
+        """Return the result of the GET request from Corpus.Vocabulary.com"""
+        headers = {'Content-Type': 'application/json'}
+        query = self.search_word.replace(' ', '+')
+        url = f"https://corpus.vocabulary.com/api/1.0/examples.json?query={query}&maxResults=1"
+        return requests.get(url,headers=headers)
+
+    def __clearString(self,text):
+        """Return the parameter without \\n \\t \\r or i tags"""
+        text = text.replace('<i>',"")
+        text = text.replace('</i>',"")
+        text_list = text.split()
+        return" ".join(text_list)
+
+    def getPhonetic(self):
+        """Return the @word phonetic"""
+        req = self.__performGoogleQuery()
+        if req.status_code != 200:
+            return "Request Error" 
+        pattern = '<span class="XpoqFe">\/<span>([\w\W]+?)<\/span>'
+        match = re.search(pattern,req.text)
+        if match is None:
+            return "Not found: phonetic" 
+        return self.__clearString(match.group(1))
+
+    def getDefinition(self):
+        """Return the @word formal definition"""
+        req = self.__performGoogleQuery()
+        if req.status_code != 200:
+            return "Request Error" 
+        pattern = 'class="QIclbb"><div style="[A-z:]+?" data-dobid="dfn"><span>([\w\W]+?)<\/span>'
+        match = re.search(pattern,req.text)
+        if match is None:
+            return "Not found: Definition" 
+        return self.__clearString(match.group(1)) 
+
+    def getUrbanDefinition(self):
+        """Return the @word urban definition"""
+        req = self.__performVocabularyQuery()
+        if req.status_code != 200:
+            return "Request Error"  
+        pattern = '<p class="short">([\w\W]+?)<\/p>'
+        match = re.search(pattern,req.text)
+        if match is None:
+            return "Not found: Definition" 
+        return self.__clearString(match.group(1)) 
+
+    def getSentence(self):
+        """Return the @word example sentece"""
+        req = self.__performCorpusVocabularyQuery()
+        if req.status_code != 200:
+            return "Request Error"  
+        data = req.json()
+        if data["result"]["totalHits"] == 0:
+            return "Not found: Sentences" 
+        sentence_list = data["result"]["sentences"]
+        for node in sentence_list:
+            return self.__clearString(node['sentence'])
