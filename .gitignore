@@ -1,8 +1,11 @@
 # Custom
-Emmily/settings.py
+Emmily/db.sqlite3
+.vscode/*
+.replit
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+Emmily/__pycache__/
 *.py[cod]
 *$py.class
 
