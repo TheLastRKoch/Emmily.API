@@ -1,9 +1,9 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
-from Emmily.services import DictionaryEn
+from rest_framework import status
 
 from wordlist_skill.serializers import WordSerializer
 from wordlist_skill.models import Word
@@ -41,9 +41,10 @@ class WordCreation(CreateAPIView):
         return super().create(request,*args,**kwargs)
     
 
-class WordDestroy(DestroyAPIView):
+class WordRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Word.objects.all()
     lookup_field = 'id'
+    serializer_class = WordSerializer
 
     def delete(self,request,*args, **kwargs):
         #Clear cache
@@ -52,4 +53,19 @@ class WordDestroy(DestroyAPIView):
         if response.status_code == 204:
             from django.core.cache import cache
             cache.delete('product_data_{}'.format(product_id))
+        return response
+
+    def update(self,request,*args, **kwargs):
+        response = super().update(request,*args, **kwargs)
+        if response.status_code == 200:
+            from django.core.cache import cache
+            word = response.data
+            cache.set('word_data_{}'.format(word['id']),{
+                'word': word['word'],
+                'language': word['language'],
+                'phonetic': word['phonetic'],
+                'definition': word['definition'],
+                'urban_definition': word['urban_definition'],
+                'example': word['example']
+            })
         return response

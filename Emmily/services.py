@@ -40,43 +40,43 @@ class DictionaryEn():
         """Return the @word phonetic"""
         req = self.__performGoogleQuery()
         if req.status_code != 200:
-            return "Request Error" 
+            return "Error: Invalid request" 
         pattern = '<span class="XpoqFe">\/<span>([\w\W]+?)<\/span>'
         match = re.search(pattern,req.text)
         if match is None:
-            return "Not found: phonetic" 
+            return "Error: phonetic not found" 
         return self.__clearString(match.group(1))
 
     def getDefinition(self):
         """Return the @word formal definition"""
         req = self.__performGoogleQuery()
         if req.status_code != 200:
-            return "Request Error" 
+            return "Error: Invalid request" 
         pattern = 'class="QIclbb"><div style="[A-z:]+?" data-dobid="dfn"><span>([\w\W]+?)<\/span>'
         match = re.search(pattern,req.text)
         if match is None:
-            return "Not found: Definition" 
+            return "Error: Definition not found" 
         return self.__clearString(match.group(1)) 
 
     def getUrbanDefinition(self):
         """Return the @word urban definition"""
         req = self.__performVocabularyQuery()
         if req.status_code != 200:
-            return "Request Error"  
+            return "Error: Invalid request"  
         pattern = '<p class="short">([\w\W]+?)<\/p>'
         match = re.search(pattern,req.text)
         if match is None:
-            return "Not found: Definition" 
+            return "Error: Definition not found" 
         return self.__clearString(match.group(1)) 
 
     def getSentence(self):
         """Return the @word example sentece"""
         req = self.__performCorpusVocabularyQuery()
         if req.status_code != 200:
-            return "Request Error"  
+            return "Error: Invalid request"  
         data = req.json()
         if data["result"]["totalHits"] == 0:
-            return "Not found: Sentences" 
+            return "Error: Sentences not found" 
         sentence_list = data["result"]["sentences"]
         for node in sentence_list:
             return self.__clearString(node['sentence'])
