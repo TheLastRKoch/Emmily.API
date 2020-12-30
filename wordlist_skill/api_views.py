@@ -1,18 +1,22 @@
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.authentication import TokenAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework import status
-
+from rest_framework.exceptions import ValidationError
 from wordlist_skill.serializers import WordSerializer
+from rest_framework.permissions import IsAdminUser
+from rest_framework.filters import SearchFilter
+from django.contrib.auth.models import User
 from wordlist_skill.models import Word
+from rest_framework import generics
 
 class WordPagination(LimitOffsetPagination):
     default_limit = 10
     max_limit = 100
 
 class WordList(ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     filter_backends = (DjangoFilterBackend,SearchFilter)
@@ -30,18 +34,18 @@ class WordList(ListAPIView):
                 )
             return queryset
 
-
 class WordCreation(CreateAPIView):
+    permission_classes = [IsAdminUser]
     serializer_class = WordSerializer
     
     def create(self,request,*args,**kwargs):
         #Check if the word already exist
         if Word.objects.filter(word = request.data.get("word")).count() != 0:
             raise ValidationError({'word':'Already existe on the DB'})
-        return super().create(request,*args,**kwargs)
-    
+        return super().create(request,*args,**kwargs)    
 
 class WordRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminUser]   
     queryset = Word.objects.all()
     lookup_field = 'id'
     serializer_class = WordSerializer
