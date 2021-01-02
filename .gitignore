@@ -2,6 +2,7 @@
 Emmily/db.sqlite3
 .vscode/*
 .replit
+.vm/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
