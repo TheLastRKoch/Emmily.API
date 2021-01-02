@@ -1,1 +1,1 @@
-web: gunicorn apiemmily:app --log-file=-
+web: gunicorn Emmily.wsgi --log-file=-
