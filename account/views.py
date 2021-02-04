@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
+
+from rest_framework.authtoken.models import Token
 
 def registration_view(request):
 	context = {}
@@ -86,8 +91,34 @@ def account_view(request):
 
 	return render(request, "account/account.html", context)
 
-
 def must_authenticate_view(request):
 	return render(request, 'account/must_authenticate.html', {})
 
+# LOGIN
+# Response: https://gist.github.com/mitchtabian/8e1bde81b3be342853ddfcc45ec0df8a
+# URL: http://127.0.0.1:8000/api/account/login
+class ObtainAuthTokenView(APIView):
+
+	authentication_classes = []
+	permission_classes = []
+
+	def post(self, request):
+		context = {}
+
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		account = authenticate(username=username, password=password)
+		if account:
+			try:
+				token = Token.objects.get(user=account)
+			except Token.DoesNotExist:
+				token = Token.objects.create(user=account)
+			context['response'] = 'Successfully authenticated.'
+			context['username'] = username.lower()
+			context['token'] = token.key
+		else:
+			context['response'] = 'Error'
+			context['error_message'] = 'Invalid credentials'
+
+		return Response(context)
 

@@ -9,7 +9,6 @@ from rest_framework.filters import SearchFilter
 from django.contrib.auth.models import User
 from wordlist_skill.models import Word
 from rest_framework import generics
-
 class WordPagination(LimitOffsetPagination):
     default_limit = 10
     max_limit = 100

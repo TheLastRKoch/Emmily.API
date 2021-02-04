@@ -17,6 +17,7 @@ class WordSerializer(serializers.ModelSerializer):
         custom_definition = dic.getDefinition()
         custom_urban_definition = dic.getUrbanDefinition()
         custom_example =  dic.getSentence()
+        user = self.context['request'].user
 
         if "Error" not in custom_phonetic:
             instance['phonetic'] = custom_phonetic

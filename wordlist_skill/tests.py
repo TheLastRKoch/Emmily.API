@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
 from wordlist_skill.models import Word
+from account.backends import CaseInsensitiveModelBackend
 
 class WordCreateTestCase(APITestCase):
     def test_create_word(self):
