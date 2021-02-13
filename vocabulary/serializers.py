@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from wordlist_skill.models import Word
+from vocabulary.models import Word
 from Emmily.services import DictionaryEn
 
 class WordSerializer(serializers.ModelSerializer):
@@ -47,8 +47,4 @@ class WordSerializer(serializers.ModelSerializer):
 
 
 class WordListSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(read_only=True)
-    language = serializers.CharField(read_only=True)
-    #owner = self.context['request'].user
-    def create(self, instance):
-        return super().create(instance)
+    pass
