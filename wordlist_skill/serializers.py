@@ -3,6 +3,7 @@ from wordlist_skill.models import Word
 from Emmily.services import DictionaryEn
 
 class WordSerializer(serializers.ModelSerializer):
+
     phonetic = serializers.CharField(read_only=True)
     definition = serializers.CharField(read_only=True)
     urban_definition = serializers.CharField(read_only=True)
@@ -17,7 +18,6 @@ class WordSerializer(serializers.ModelSerializer):
         custom_definition = dic.getDefinition()
         custom_urban_definition = dic.getUrbanDefinition()
         custom_example =  dic.getSentence()
-        user = self.context['request'].user
 
         if "Error" not in custom_phonetic:
             instance['phonetic'] = custom_phonetic
@@ -43,4 +43,12 @@ class WordSerializer(serializers.ModelSerializer):
             # Log in here
             pass
         
+        return super().create(instance)
+
+
+class WordListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(read_only=True)
+    language = serializers.CharField(read_only=True)
+    #owner = self.context['request'].user
+    def create(self, instance):
         return super().create(instance)
