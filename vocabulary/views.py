@@ -8,4 +8,5 @@ def test (resquest):
     return JsonResponse({'response':'This is a test'})
 
 def index(request):
+    print("test")
     return render(request,'index.html')

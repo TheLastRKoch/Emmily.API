@@ -18,5 +18,5 @@ class WordList(models.Model):
     name = models.CharField(max_length=100)
     language = models.CharField(max_length=100)
     owner = models.ForeignKey(User,on_delete=models.CASCADE)
-    words = models.ManyToManyField(Word)
+    words = models.ManyToManyField(Word, blank=True)
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from vocabulary.models import Word
+from vocabulary.models import Word, WordList
 from Emmily.services import DictionaryEn
 
 class WordSerializer(serializers.ModelSerializer):
@@ -45,6 +45,16 @@ class WordSerializer(serializers.ModelSerializer):
         
         return super().create(instance)
 
-
+# Todo: Make this work
+# Todo: Think in a way to add new words
 class WordListSerializer(serializers.ModelSerializer):
-    pass
+    
+    def create(self, instance):
+        custom_owner = self.context['request'].user
+        if custom_owner != None:
+            instance['owner'] = custom_owner
+        return super().create(instance)
+
+    class Meta:
+        model = WordList
+        fields = fields = '__all__'
