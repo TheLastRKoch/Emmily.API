@@ -53,8 +53,7 @@ class OwnerSerializer(serializers.ModelSerializer):
         fields = ('id','username','email')
         model = User
 
-# Todo: Make this work
-# Todo: Think in a way to add new words
+
 class WordListSerializer(serializers.ModelSerializer):
     
     def create(self, instance):

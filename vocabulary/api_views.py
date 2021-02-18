@@ -35,6 +35,7 @@ class WordGetList(ListAPIView):
             return queryset
 
 class WordCreation(CreateAPIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     serializer_class = WordSerializer
     
@@ -45,6 +46,7 @@ class WordCreation(CreateAPIView):
         return super().create(request,*args,**kwargs)   
 
 class WordRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     queryset = Word.objects.all()
     lookup_field = 'id'
@@ -88,9 +90,10 @@ class WordListGetList(ListAPIView):
     pagination_class = Pagination
 
     def get_queryset(self):
-            #Filter by language
             request_language = self.request.query_params.get('lan', None)
-            queryset = WordList.objects.all()
+            current_user = self.request.user
+            queryset = WordList.objects.filter(owner=current_user)
+            # Filter by language
             if request_language is not None: 
                 queryset = queryset.filter(
                     language=request_language
@@ -99,6 +102,7 @@ class WordListGetList(ListAPIView):
 
 
 class WordListCreation(CreateAPIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     serializer_class = WordListSerializer
     
@@ -109,6 +113,7 @@ class WordListCreation(CreateAPIView):
         return super().create(request,*args,**kwargs)  
 
 class WordListRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]   
     queryset = Word.objects.all()
     lookup_field = 'id'
