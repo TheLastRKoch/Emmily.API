@@ -70,7 +70,7 @@ class DictionaryEn():
         return self.__clearString(match.group(1)) 
 
     def getSentence(self):
-        """Return the @word example sentece"""
+        """Return the @word example sentence"""
         req = self.__performCorpusVocabularyQuery()
         if req.status_code != 200:
             return "Error: Invalid request"  

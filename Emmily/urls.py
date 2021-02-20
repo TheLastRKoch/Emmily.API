@@ -13,7 +13,9 @@ from account.views import (
 )
 
 urlpatterns = [
-    # REST-framework
+    path('', include('frontend.urls')),
+    
+    # API
     path('api/v1/vocabulary/', include('vocabulary.urls')),
     
     path('admin/', admin.site.urls),

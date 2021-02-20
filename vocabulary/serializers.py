@@ -3,6 +3,7 @@ from rest_framework import serializers
 from vocabulary.models import Word, WordList
 from Emmily.services import DictionaryEn
 from django.contrib.auth.models import User
+from rest_framework.exceptions import ValidationError
 
 class WordSerializer(serializers.ModelSerializer):
 
@@ -53,7 +54,6 @@ class OwnerSerializer(serializers.ModelSerializer):
         fields = ('id','username','email')
         model = User
 
-
 class WordListSerializer(serializers.ModelSerializer):
     
     def create(self, instance):
@@ -61,6 +61,9 @@ class WordListSerializer(serializers.ModelSerializer):
         if custom_owner != None:
             instance['owner'] = custom_owner
         return super().create(instance)
+
+    def update(self,instance, validated_data):
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

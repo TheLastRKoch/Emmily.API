@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
 from rest_framework.authentication import TokenAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
@@ -42,7 +42,7 @@ class WordCreation(CreateAPIView):
     def create(self,request,*args,**kwargs):
         #Check if the word already exist
         if Word.objects.filter(word = request.data.get("word")).count() != 0:
-            raise ValidationError({'word':'Already exist on the DB'})
+            raise ValidationError({'detail': 'Already exist on the DB'})
         return super().create(request,*args,**kwargs)   
 
 class WordRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
@@ -109,13 +109,13 @@ class WordListCreation(CreateAPIView):
     def create(self,request,*args,**kwargs):
         #Check if the wordlist already exist
         if WordList.objects.filter(name = request.data.get("name")).count() != 0:
-            raise ValidationError({'WordList name':'Already exist on the DB'})
+            raise ValidationError( {'detail': 'Already exist on the DB'})
         return super().create(request,*args,**kwargs)  
 
 class WordListRetriveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]   
-    queryset = Word.objects.all()
+    queryset = WordList.objects.all()
     lookup_field = 'id'
     serializer_class = WordListSerializer
 
