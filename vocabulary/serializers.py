@@ -1,9 +1,7 @@
-from django.db.models import fields
 from rest_framework import serializers
 from vocabulary.models import Word, WordList
 from Emmily.services import DictionaryEn
 from django.contrib.auth.models import User
-from rest_framework.exceptions import ValidationError
 
 class WordSerializer(serializers.ModelSerializer):
 

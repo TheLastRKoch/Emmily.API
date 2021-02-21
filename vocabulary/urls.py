@@ -6,12 +6,11 @@ app_name = 'vocabulary'
 
 urlpatterns = [
     # Words manage
-	path('word',views.getWords , name="list"),
-	path('word/<int:id>',views.WordRetriveUpdateDestroy , name="detail"),
-	path('word/new', views.addNewWord, name="create"),
+	path('word',views.word_list_add , name="get_words"),
+	path('word/<int:id>',views.word_retrive_update_destroy , name="word_retrive_update_destroy"),
 
 	# WordList manage
-	#path('wordlist', WordListGetList.as_view() , name="list"),
-	#path('wordlist/new', WordListCreation.as_view(), name="create"),
-	#path('wordlist/<int:id>', WordListRetriveUpdateDestroy.as_view(), name="manage")
+	path('wordlist', views.wordlist_list_add , name="get_wordlists"),
+	path('wordlist/<int:id>', views.wordlist_retrive_update_destroy, name="wordlist_retrive_update_destroy"),
+	path('wordlist/<int:id>/add-word', views.wordlist_add_words, name="wordlist-add-word")
 ]
