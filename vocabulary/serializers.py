@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from vocabulary.models import Word, WordList
-from Emmily.services import DictionaryEn
 from django.contrib.auth.models import User
+from Emmily.services import DictionaryEn
+from vocabulary.models import Word, WordList
 
 class WordSerializer(serializers.ModelSerializer):
 
