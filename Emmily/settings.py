@@ -16,7 +16,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', "True") == "True"
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', ';').split()
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -31,8 +31,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'django_filters',
-    'wordlist_skill',
-    'account'
+    'account',
+    'vocabulary'
 ]
 
 REST_FRAMEWORK = {
@@ -80,6 +80,7 @@ WSGI_APPLICATION = 'Emmily.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
@@ -87,6 +88,10 @@ DATABASES = {
         'PORT': config('DB_PORT'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD')
+    },
+    'SQL-Lite': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
 }
 
@@ -108,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

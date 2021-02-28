@@ -1,15 +1,18 @@
 from rest_framework import serializers
-from wordlist_skill.models import Word
+from django.contrib.auth.models import User
 from Emmily.services import DictionaryEn
+from vocabulary.models import Word, WordList
 
 class WordSerializer(serializers.ModelSerializer):
+
     phonetic = serializers.CharField(read_only=True)
     definition = serializers.CharField(read_only=True)
     urban_definition = serializers.CharField(read_only=True)
     example = serializers.CharField(read_only=True)
     class Meta:
         model = Word
-        fields = ('id','word','language','phonetic','definition','urban_definition','example')
+        fields = fields = '__all__'
+        depth = 1
 
     def create(self, instance):
         dic = DictionaryEn(instance['word'])
@@ -43,3 +46,29 @@ class WordSerializer(serializers.ModelSerializer):
             pass
         
         return super().create(instance)
+
+class OwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id','username','email')
+        model = User
+
+class WordListSerializer(serializers.ModelSerializer):
+    
+    def create(self, instance):
+        custom_owner = self.context['request'].user
+        if custom_owner != None:
+            instance['owner'] = custom_owner
+        return super().create(instance)
+
+    def update(self,instance, validated_data):
+        return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["owner"] = OwnerSerializer(instance.owner).data
+        return representation
+
+    class Meta:
+        model = WordList
+        fields = fields = '__all__'
+        depth = 1

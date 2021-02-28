@@ -41,7 +41,7 @@ class DictionaryEn():
         req = self.__performGoogleQuery()
         if req.status_code != 200:
             return "Error: Invalid request" 
-        pattern = '<span class="XpoqFe">\/<span>([\w\W]+?)<\/span>'
+        pattern = '<div class="S23sjd g30o5d"><span>\/<span>([\w\W]+?)<\/span>\/'
         match = re.search(pattern,req.text)
         if match is None:
             return "Error: phonetic not found" 
@@ -52,7 +52,7 @@ class DictionaryEn():
         req = self.__performGoogleQuery()
         if req.status_code != 200:
             return "Error: Invalid request" 
-        pattern = 'class="QIclbb"><div style="[A-z:]+?" data-dobid="dfn"><span>([\w\W]+?)<\/span>'
+        pattern = 'style="display:inline" data-dobid="dfn"><span>([\w\W]+?)<\/span>'
         match = re.search(pattern,req.text)
         if match is None:
             return "Error: Definition not found" 
@@ -70,7 +70,7 @@ class DictionaryEn():
         return self.__clearString(match.group(1)) 
 
     def getSentence(self):
-        """Return the @word example sentece"""
+        """Return the @word example sentence"""
         req = self.__performCorpusVocabularyQuery()
         if req.status_code != 200:
             return "Error: Invalid request"  
