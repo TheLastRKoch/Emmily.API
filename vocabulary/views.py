@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from .models import Word, WordList
 from .serializers import WordSerializer, WordListSerializer
 from django.core.exceptions import ObjectDoesNotExist
-import json
 
 #region Word
 @api_view(["GET","POST"])

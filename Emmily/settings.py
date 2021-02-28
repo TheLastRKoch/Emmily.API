@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'Emmily.wsgi.application'
 
 DATABASES = {
    
-    'Post_gree': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'HOST': config('DB_HOST'),
@@ -89,7 +89,7 @@ DATABASES = {
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD')
     },
-    'default': {
+    'SQL-Lite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'db.sqlite3',
     }
