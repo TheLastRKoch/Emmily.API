@@ -60,7 +60,7 @@ def wordlist_list_add(request):
         if WordList.objects.filter(name = request.data["name"]).count() > 0:
             raise ValidationError({"detail": "The requested wordlist already exist on the DB"})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
         return Response (serializer.data)
 
 @api_view(["GET","PUT","DELETE"])

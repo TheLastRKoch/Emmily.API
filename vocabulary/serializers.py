@@ -55,9 +55,6 @@ class OwnerSerializer(serializers.ModelSerializer):
 class WordListSerializer(serializers.ModelSerializer):
     
     def create(self, instance):
-        custom_owner = self.context['request'].user
-        if custom_owner != None:
-            instance['owner'] = custom_owner
         return super().create(instance)
 
     def update(self,instance, validated_data):
